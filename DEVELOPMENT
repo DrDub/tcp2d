@@ -1,0 +1,5 @@
+1.] Working on add_classification_tree_node to build binary trees of sequence numbers.
+
+2.] Amending get_classification_label with tree searching.
+
+3.] Add text file input options for formatting and classification-rules

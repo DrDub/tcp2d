@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo "\n\nThere's no configure file yet; but the only dependency for this project is libpcap.\n";
+echo "If there's an error make sure you have it.  On ubuntu use: sudo apt-get install libpcap*";
+echo "\n\n";
+
+sudo make -C src/
+
+echo "#!/bin/sh\nsudo make clean -C src/\nrm ./uninstall" > uninstall
+chmod +x ./uninstall

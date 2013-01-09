@@ -1,0 +1,6 @@
+
+The 'installer' script provided should work on most linux systems.  If it fails try installing libpcap.  
+
+Otherwise try entering the src/ directory and running 'sudo make && sudo make install'
+
+

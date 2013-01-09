@@ -1,0 +1,66 @@
+# By default a header is printed for each field.  To turn off headers use '-H'
+
+# If you'd like to have a new header for each conversation (i.e. ip/port combo) use the '-S' option
+
+# To 'mash' streams so that requests and responses appear on the same line use the '-M' option
+
+# To change the delimitor from the default ',' to something else use the '-d <new_delimitor>' option
+
+# To format the output, and access various fields in the packet data, you just need to use the '-m' options with any of the following text cues placed afterword.
+
+*note* Remember to end every field with a semi-colon ';'
+
+Example: to output source ip, sequence number, ack flags, and hex payloads use this option.	` tcp2d -f <pcap> -m "srcip;seq;ackflag;payload;" -X`
+
+default; -> timestamp, sequence number, acknowledgement number, src ip, src port, dst ip, dst port
+
+tcpflags;-> All six tcp flags.	
+
+payload; -> Payload (You can also filter this with the -T (text only) and -X (hex) options).
+
+ts;	 -> Timestamp, sec and usec.
+
+seq; 	 -> Sequence Number
+
+ack;	 -> Acknowledgement Number
+
+srcip;	 -> Source IP
+	
+dstip;	 -> Destination IP
+
+srcport; -> Source Port
+
+dstport; -> Destination Port
+
+res1;	 -> Reserved bits in TCP Header
+res2;
+
+doff;	 -> Header Length (TCP Header)
+
+/*TCP Flags*/
+finflag;
+synflag;
+rstflag;
+pshflag;
+ackflag;
+urgflag;
+
+        
+window; -> Window
+check; -> Checksum
+urg_ptr;
+
+/*IP Header Values*/
+
+Some require a bitmask/bitwise operations to be understood properly
+please see netinet/ip.h
+
+ip_v; 
+ip_hl;
+ip_tos;
+ip_len;
+ip_id;
+ip_off;
+ip_ttl;
+ip_p;
+ip_sum;

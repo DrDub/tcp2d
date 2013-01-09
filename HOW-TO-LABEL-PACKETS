@@ -1,0 +1,48 @@
+Individual packets can be labeled with classification rules using the '-c' option.
+
+For efficiency, at this time, labeling a packet requires previous knowledge of its conversation number (as read by tcp2d) and the sequence number.
+
+To get a list of conversations simply use the -L option ` tcp2d -f <pcap> -L `
+
+Once you know the conversation number where your packet(s) will fall and their sequence number(s) simply input rules with the following format
+
+*note* ending each rule with a semi-colon ';' is very important!
+
+<conversation_number>:<sequence_number>,<sequence_number2>,...,<sequence_numberN>=<label_value>;
+
+You can also define ranges with a dash like so: <conversation_number>:<sequence_number_low>-<sequence_number_high>=<label_value>;
+
+If you would like to label an entire conversation at once simply use the sequence number 0.
+
+Example 1:  Label the first and second conversation (every packet).
+		`tcp2d -f <pcap> -c "1:0=fist_label;2:0=second_label;"`
+
+	The results will appear as:
+		...,label
+		...,first_label
+		...,first_label
+		...,second_label
+		...,second_label
+		...,second_label
+		...,-
+		...,-
+		and so on....
+
+Example 2: Label packets from conversation 3 with sequence numbers 4,18, and 25-33
+		`tcp2d -f <pcap> -c "3:4,18,25-33=a_more_specific_label"`
+
+	The results will appear as
+		..seq,label
+		..1,-
+		..3,-
+	 	..4,a_more_specific_label
+		..8,-
+		..9,-
+		..18,a_more_specific_label
+	 	..21,-
+		..25,a_more_specific_label
+		..30,a_more_specific_label
+		..31,a_more_specific_label
+		..34,-
+
+

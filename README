@@ -1,0 +1,122 @@
+//CURRENT STATE OF DEVELOPMENT
+
+All basic features implemented, however, labeling only works on whole conversations for the moment.  Support for specific packets will be implemented by this weekend.
+Also, formatting and labeling options will have options for reading in from a text file soon.
+
+//ABOUT
+
+tcp2d is a result of my wanting to produce pcap based data sets in Weka for testing machine learning algorithms.  The specific features I needed were the ability to 'mash' tcp streams by displaying the request and response packets side by side (for flow classification) and the ability to easily classify packets within a data set by label.
+
+I found several projects which allowed for transferring pcap files to csv, however, they lacked the features I needed in order by build nice Weka data sets.  So, I started working on a (very simple and limited) tcp stream reassembler so that I could mash and classify packets and create the kinds of data sets I wanted to test.  It seems I wasn't alone in this either: https://list.scms.waikato.ac.nz/pipermail/wekalist/2010-August/049433.html
+
+I've also added various filters for payload data and a formatting scheme that allows any field in the ip/tcp header to be displayed as a column of data, as well as the ability to dump binaries of reassembled payloads (see the '-B' option).  I'm also working on auto generating ARFF headers.  I feel like this project is just starting to get to a usable state, and I'll be building some training sets with it in the coming weeks/months that I'll share.  Hopefully some other people out there can find use in it as well.  
+
+--M
+
+//USAGE OPTIONS
+
+Options with arguments:
+-f --filename     	  (path to a packet capture file to be used)
+-o --output 	 	  (name/path to an output file)
+-d --delimitor	  	  (change the field delimitor, default is ',')
+-c --classification-rules (allows classification of individual packets)
+-m --format	  	  (change the fields displayed)
+
+format example: -m 'srcip;dstip;tcpflags;ip_len;payload;'
+will output the source ip, destination ip, tcp flags, ip length, and payload.
+All data available in the header structs from netinet/ip.h and netinet/tcp.h isavailable and generally follows the naming convention of the struct variable name(i.e. ip_len) and must be followed by a semicolon.
+
+Flags:
+-L --list-conversations (shows all tcp conversations available in a data set)
+-A --arff-header  /in development/(adds an arff header to the top of any output)
+-H --no-header	  (disables column headings)
+-T --text-payload (remove all non-printable values from payloads)
+-X --hex-payload  (show all payloads as hex, most useful for document classification of payloads)
+-S --split-output (split output streams into individual files)
+-M --mash	  (print requests and responses on a single line)
+-B --binary-dump  (dumps binary payloads from streams into indidual files for pcap mining)
+-D --keep-duplicates (turns off dropping of duplicate packets)
+-Q --quiet	  (disable stdout)
+-N --no-wrap	  (print results as a single line)
+
+//FOR INFO ON FORMATTING AND LABELING SEE:
+	
+	HOW-TO-FORMAT-OUTPUT
+	and
+	HOW-TO-LABEL-PACKETS
+
+//A FEW USAGE EXAMPLES
+
+misc.)
+
+Dumping binary files for each conversation recorded into current directory: ./tcp2d -f <pcap> -o <outfile> -B
+
+Saving regular output to individual files: ./tcp2d -f <pcap> -o <outfile> -S 
+
+1.) Mashed output of sequence number, ack number, and tcpflags.
+
+./tcp2d -f samples/browsing_google_for_gnu.pcap -m "seq;ack;tcpflags;" -M
+
+seq_number,ack_number,fin,syn,rst,psh,ack,urg,response_seq_number,response_ack_number,response_fin,response_syn,response_rst,response_psh,response_ack,response_urg
+2180390404,1220652710,0,0,0,1,1,0,1220652710,1190600196,0,0,0,1,1,0
+1190600196,297971366,0,0,0,0,1,0,297971366,200809988,0,0,0,1,1,0
+200809988,3670191782,0,0,0,0,1,0,3670191782,3505921540,0,0,0,0,1,0
+3505921540,2378411686,0,0,0,0,1,0,2378411686,2516131332,0,0,0,0,1,0
+
+2.) The default display ("default;") which is also equivalent to the format options shown below:
+
+./tcp2d -f samples/browsing_google_for_gnu.pcap -m "ts;seq;ack;srcip;srcport;dstip;dstport;"
+
+timestamp|sequence#|acknowledgement#|srcip|srcport|dstip|dstport
+
+1357328815.3646,3859921346,0,199.47.216.173,443,192.168.1.104,43881
+1357328792.707250,333991214,3981934104,192.168.1.104,36907,199.47.219.159,443
+1357328792.780175,3981934104,0,199.47.219.159,443,192.168.1.104,36907
+1357328790.542219,1974316442,1610865336,199.47.218.160,443,192.168.1.104,45379
+1357328790.542259,1610865336,2595073434,192.168.1.104,45379,199.47.218.160,443
+1357328790.556821,2595073434,1610865336,199.47.218.160,443,192.168.1.104,45379
+
+
+3.) Showing the default display along with tcp flags, ip length, and a text only payload:
+
+./tcp2d -f samples/browsing_google_for_gnu.pcap -m "default;tcpflags;ip_len;payload;" -T
+
+payload|timestamp|sequence#|acknowledgement#|srcip|srcport|dstip|dstport|fin|syn|rst|psh|ack|urg|ip_len
+
+"POST / HTTP/1.1^M
+Host: ocsp.thawte.com^M
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0^M
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8^M
+Accept-Language: en-US,en;q=0.5^M
+Accept-Encoding: gzip, deflate^M
+Connection: keep-alive^M
+Content-Length: 115^M
+Content-Type: application/ocsp-request^M
+^M
+0q0o0M0K0I0     ^F^E+^N^C^B^Z^E",1357328845.532917,955990035,2680340203,192.168.1.104,50674,199.7.52.72,80,1,0,0,1,1,0,65025
+"HTTP/1.0 200 Ok^M
+last-modified: Wed, 02 Jan 2013 01:41:24 GMT^M
+expires: Wed, 09 Jan 2013 01:41:24 GMT^M
+content-type: application/ocsp-response^M
+content-transfer-encoding: binary^M
+content-length: 1084^M
+cache-control: max-age=366841, public, no-transform, must-revalidate^M
+date: Fri, 04 Jan 2013 19:47:23 GMT^M
+nncoection: close^M
+Connection: Keep-Alive^M
+^M
+0<82>^D8
+^A",1357328851.485156,2680340203,251478035,199.7.52.72,80,192.168.1.104,50674,0,0,0,1,1,0,50437
+
+4.) hex payloads, syn flags, ack flags, ip offsets
+
+./tcp -f samples/browsing_google_for_gnu.pcap -m "synflag;ackflag;ip_off;payload;" -X
+
+ 656e 742d 6c62 0764 726f 7062 6f786e 742d 6c62 0764 726f 7062 6f78 0363 6f6d ",0,0,64
+"0101 080",0,1,64
+"0204 05b4 0402 0",0,0,64
+"0101 080a 0148 c",0,1,64
+"0101 080",0,1,64
+"0101 080a 0148 c",0,1,64
+"0101 080",0,1,64
+"0101 080",0,0,64

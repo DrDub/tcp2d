@@ -46,7 +46,7 @@ void add_classification(struct classification * newmember)
 		/*this looping just finds the correct bin for our conversation*/
 		if(newmember->conversation_number == classification_rules->conversation_number)
 		{
-			//Add a new tree node
+			add_classification_tree_node(newmember->root,classification_rules->root);
 		}
 		else
 		{	
@@ -55,7 +55,7 @@ void add_classification(struct classification * newmember)
 			{
 				if(current->conversation_number == newmember->conversation_number)
 				{
-					//Add a new tree node
+					add_classification_tree_node(newmember->root,classification_rules->root);
 					match_found = 1;
 					break;
 				}
@@ -111,12 +111,59 @@ void add_classification(struct classification * newmember)
 void add_classification_tree_node(struct classification_tree_node * newmember,
                                         struct classification_tree_node * root)
 {
-	
+	struct classification_tree_node * current, * last;
+
+	last = root;
+	if(newmember->seq <= root->seq)
+	{
+		current = root->left;
+	}
+	else
+	{
+		current = root->right;
+	}
+
+	while(current)
+	{
+		if(newmember->seq <= current->seq)
+		{
+			last = current;
+			current = current->left;
+		}
+		else
+		{
+			last = current;
+			current = current->right;
+		}
+	}
+
+	if(newmember->seq <= last->seq)
+	{
+		last->left = newmember;
+	}
+	else
+	{
+		last->right = newmember;
+	} 
+}
+
+_Bool classification_tree_comparator(struct classification_tree_node * node, 
+						struct conversation * current)
+{
+	if(node->seq == current->seq)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 char * get_classification_label(struct conversation * current,int conversation_number)
 {
-	struct classification * placeholder;	
+	struct classification * placeholder;
+	struct classification_tree_node  * placeholder_node;	
 
 	/*jump to the correct node, and delete the ones that are already used*/
 	while(classification_rules)
@@ -138,7 +185,48 @@ char * get_classification_label(struct conversation * current,int conversation_n
 	{
 		if(classification_rules->conversation_number == conversation_number)
 		{
-			return classification_rules->root->label;
+			/*Make sure we're not already at the right spot*/
+			if(classification_tree_comparator(classification_rules->root,current))
+			{
+				return classification_rules->root->label;
+			}
+			else if(classification_rules->root->seq < current->seq)
+			{
+				placeholder_node = classification_rules->root->left;
+				if(placeholder_node){printf("left %u",placeholder_node->seq);}
+				else{printf("left_is_blank\n");}
+			}
+			else
+			{
+				placeholder_node = classification_rules->root->right;
+				if(placeholder_node){printf("right %u",placeholder_node->seq);}
+				else{printf("right_is_blank\n");}
+
+			}
+			
+			/*Look for matches in the tree*/
+			while(placeholder_node)
+			{
+				printf("h %u l \n",placeholder_node->seq,placeholder_node->seq_high);
+
+				//if(classification_tree_comparator(placeholder_node,current))
+				//{
+				//	return placeholder_node->label;
+				//}
+
+				/*move on to the next node*/
+				if(placeholder_node->seq < current->seq)
+				{
+					placeholder_node = placeholder_node->left;
+				}
+				else
+				{
+					placeholder_node = placeholder_node->right;
+				}
+
+			}
+			/*otherwise just give up*/
+			return argopts._default_label_;
 		}
 		else
 		{

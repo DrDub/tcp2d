@@ -68,6 +68,9 @@ void add_classification(struct classification *);
 void add_classification_tree_node(struct classification_tree_node * /*new member*/,
 					struct classification_tree_node * /*root*/);
 
+_Bool classification_tree_comparator(struct classification_tree_node *, 
+                                                struct conversation * );
+
 //Returns a label when conversation_number and sequence number match
 char * get_classification_label(struct conversation * /*conversation to compare*/,int conversation_number);
 

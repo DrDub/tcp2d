@@ -37,7 +37,7 @@ void process(u_char *userData, const struct pcap_pkthdr* pkthdr, const u_char* p
 	if(argopts._print_payload_)
 	{
 		char * raw = (char *)packet+sizeof(struct ether_header)+sizeof(struct ip)+sizeof(struct tcphdr);
-		char * payload = (char *)malloc(sizeof(char)*strlen(raw));	
+		char * payload = (char *)malloc(sizeof(char)*(strlen(raw)*2)+1);	
 	
 		memcpy(payload,raw,strlen(raw));
 
@@ -47,7 +47,7 @@ void process(u_char *userData, const struct pcap_pkthdr* pkthdr, const u_char* p
 		}
 		else if(argopts._hex_payload_)
 		{
-			binary_to_printable(payload);
+			binary_to_printable(raw,payload);
 		}
 
 		current->payload = payload;

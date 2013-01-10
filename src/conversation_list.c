@@ -100,7 +100,7 @@ void print_conversation_list(struct conversation_list * tcp_conversations)
 	if(tcp_conversations)
 	{
 		//So we can change _outfile_ from its original state on each loop
-		char * _out_ = (char *)malloc(sizeof(char)*sizeof(argopts._outfile_)*4);
+		char * _out_ = (char *)malloc(sizeof(char)*2048);
 		int count = 1;
 		
 		/*if we aren't splitting this part's easy....*/

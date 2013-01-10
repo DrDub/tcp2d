@@ -30,6 +30,6 @@
 
 void strip_non_printable(char *);
 
-void binary_to_printable(char *);
+void binary_to_printable(char *,char *);
 
 #endif

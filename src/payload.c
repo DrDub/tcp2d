@@ -42,25 +42,21 @@ void strip_non_printable(char * payload)
         
 }
 
-void binary_to_printable(char * payload)
+void binary_to_printable(char * raw,char * payload)
 {
 	
 	int i = 0;
-	char * buffer = malloc(sizeof(char)*strlen(payload)*4);
+	char * buffer = malloc(sizeof(char)*(strlen(payload)*2)+1);
 	while(i < strlen(payload))
 	{
-		unsigned int high = (payload[i] >> 4) & 0xf;
-		unsigned int low = (payload[i] & 0xf);
+		unsigned int high = (raw[i] >> 4) & 0xf;
+		unsigned int low = (raw[i] & 0xf);
 		
 		sprintf(buffer+strlen(buffer),"%x%x",high,low);
-		
-		if((i+1)%2 == 0)
-		{
-			sprintf(buffer+strlen(buffer)," ");
-		}
 
 		++i;
 	}
-	memmove(payload,buffer,sizeof(char)*strlen(payload)*2);	
+	
+	strncpy(payload,buffer,strlen(buffer));	
 }
 

@@ -61,12 +61,8 @@ struct conversation * add_conversation(struct conversation * new_member,struct c
 	{
 		if(!head->next)
 		{	
-			if(duplicate_comparator(head,new_member) && argopts._drop_duplicates_)
+			if(!(duplicate_comparator(head,new_member) && argopts._drop_duplicates_))
 			{
-				free(new_member);
-			}
-			else
-			{	
 				if(ack_comparator(head,new_member))
 				{
 					new_member->next = head;
@@ -89,11 +85,7 @@ struct conversation * add_conversation(struct conversation * new_member,struct c
 				current = current->next;
 			}
                        
-			if(duplicate_comparator(current,new_member) && argopts._drop_duplicates_)
-			{
-				free(new_member);
-			}
-			else
+			if(!(duplicate_comparator(current,new_member) && argopts._drop_duplicates_))
 			{
 				if(ack_comparator(current,new_member))
 				{

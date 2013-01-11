@@ -66,8 +66,8 @@ struct extra_header_info
 struct conversation
 {
 	/*TCP header stuff*/
-	unsigned int seq;
-	unsigned int ack;
+	unsigned long seq;
+	unsigned long ack;
 
 	unsigned short src_port;
 	unsigned short dst_port;

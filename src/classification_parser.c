@@ -77,12 +77,12 @@ void process_classification_rules(char * arg)
 							/*for just one value, we're done*/
 							if(strstr(by_equal,"-"))
 							{
-								seq = atoi(strtok(by_equal,"-"));
-								seq_high = atoi(strtok(NULL,"-"));
+								seq = atoll(strtok(by_equal,"-"));
+								seq_high = atoll(strtok(NULL,"-"));
 							}
 							else
 							{
-								seq = atoi(by_equal);
+								seq = atoll(by_equal);
 								seq_high = 0;
 							}
 							
@@ -104,12 +104,12 @@ void process_classification_rules(char * arg)
 														
                                                         	if(strstr(by_comma,"-"))
                                                         	{
-                                                                	seq = atoi(strtok(by_comma,"-"));
-                                                                	seq_high = atoi(strtok(NULL,"-"));
+                                                                	seq = atoll(strtok(by_comma,"-"));
+                                                                	seq_high = atoll(strtok(NULL,"-"));
                                                         	}
 								else
 								{
-									seq = atoi(by_comma);
+									seq = atoll(by_comma);
 									seq_high = 0;
 								}
 							

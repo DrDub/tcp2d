@@ -191,24 +191,24 @@ char * get_classification_label(struct conversation * current,int conversation_n
 		if(classification_rules->conversation_number == conversation_number)
 		{
 			/*Make sure we're not already at the right spot*/
-			if(classification_tree_comparator(classification_rules->root,current))
+			placeholder_node = classification_rules->root;
+			if(classification_tree_comparator(placeholder_node,current))
 			{
-				return classification_rules->root->label;
+				return placeholder_node->label;
 			}
-			else if(classification_rules->root->seq < current->seq)
+			if(placeholder_node->seq < current->seq)
 			{
-				placeholder_node = classification_rules->root->left;
+				placeholder_node = placeholder_node->right;
 			}
 			else
 			{
-				placeholder_node = classification_rules->root->right;
+				placeholder_node = placeholder_node->left;
 
 			}
-			
+	
 			/*Look for matches in the tree*/
 			while(placeholder_node)
 			{
-
 				if(classification_tree_comparator(placeholder_node,current))
 				{
 					return placeholder_node->label;

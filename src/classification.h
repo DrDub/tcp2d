@@ -47,8 +47,8 @@ struct classification_tree_node
         if seq_high is greater than zero this defines a range
         [seq,seq_high]
         */
-        unsigned int seq;
-        unsigned int seq_high;
+        unsigned long long seq;
+        unsigned long long seq_high;
 
         char * label;
 

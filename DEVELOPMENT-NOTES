@@ -12,4 +12,4 @@
 
 # Generating ARFF headers.
 
-# Loading the pcap into memory once and then allowing it to be printed multiple times with multiple formats and classification labels.
+#+Progress Made; need to add a format_reset function to switch all the argopts._print_* options back to false+ Loading the pcap into memory once and then allowing it to be printed multiple times with multiple formats and classification labels.

@@ -71,16 +71,14 @@ void process(u_char *userData, const struct pcap_pkthdr* pkthdr, const u_char* p
 			tmp_addr = (struct in_addr*)&ipHeader->ip_src;
                         tmp_ip = inet_ntoa(*tmp_addr);
 			
-			current->src = (char *)malloc(sizeof(char)*strlen(tmp_ip));
-			memset(current->src,0,sizeof(char)*strlen(tmp_ip));	
-			memmove(current->src,tmp_ip,sizeof(char)*strlen(tmp_ip));
+			current->src = (char *)malloc((sizeof(char)*strlen(tmp_ip))+1);
+			strncpy(current->src,tmp_ip,sizeof(char)*strlen(tmp_ip));
                         
 			tmp_addr = (struct in_addr*)&ipHeader->ip_dst;
                         tmp_ip = inet_ntoa(*tmp_addr);
 			
-			current->dst = (char *)malloc(sizeof(char)*strlen(tmp_ip));
-                        memset(current->dst,0,sizeof(char)*strlen(tmp_ip));
-                        memmove(current->dst,tmp_ip,sizeof(char)*strlen(tmp_ip));
+			current->dst = (char *)malloc((sizeof(char)*strlen(tmp_ip))+1);
+                        strncpy(current->dst,tmp_ip,sizeof(char)*strlen(tmp_ip));
 
 			current->seq = tcpHeader->seq;
 			current->ack = tcpHeader->ack_seq;

@@ -117,7 +117,7 @@ void print_conversation_list(struct conversation_list * tcp_conversations)
 
 		/*loop through the nodes and print all of conversations stored in them*/
 
-		print_conversation(tcp_conversations->head,argopts._outfile_);
+		print_conversation(tcp_conversations->head,argopts._outfile_,count);
 		
 		struct conversation_list * current;
 		current = tcp_conversations->next;
@@ -130,7 +130,7 @@ void print_conversation_list(struct conversation_list * tcp_conversations)
 				sprintf(_out_,"%s.%i",argopts._outfile_,count);
                 	}
 	
-			print_conversation(current->head,_out_);
+			print_conversation(current->head,_out_,count);
 			current = current->next;
 		}
 		

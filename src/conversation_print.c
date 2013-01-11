@@ -169,10 +169,11 @@ void print_conversation_node(FILE * out,int packet_count,int conversation_count,
 
 }
 
-void print_conversation(struct conversation * head,char * output)
+void print_conversation(struct conversation * head,char * output,int conversation_count)
 {
 	FILE * out = 0;
-	static int conversation_count = 1;
+	/*use this instead of head to keep from losing our place*/
+	struct conversation * placeholder = head;
 
 	if(output)
 	{
@@ -215,26 +216,25 @@ void print_conversation(struct conversation * head,char * output)
 			}
 		}
 		
-		while(head)
+		while(placeholder)
 		{
 			/*binary dump gets its own loop and overrides other input types*/
 			if(output && argopts._binary_dump_)
 			{
 	
-				if(head->payload)
+				if(placeholder->payload)
 				{
                 	        	char * bin_out = (char *)
-                 		               malloc(sizeof(char)*strlen(output)+strlen(head->src)+1);
+                 		               malloc(sizeof(char)*strlen(output)+strlen(placeholder->src)+1);
 
                                	        strcat(bin_out,output);
                                         strcat(bin_out,".");
-                                        strcat(bin_out,head->src);
+                                        strcat(bin_out,placeholder->src);
 
                                         out = fopen(bin_out,"a+");
-                                        free(bin_out);
 						
-					fwrite(head->payload,sizeof(head->payload),
-						strlen(head->payload),out);
+					fwrite(placeholder->payload,sizeof(placeholder->payload),
+						strlen(placeholder->payload),out);
 
 					fclose(out);
 				}
@@ -245,13 +245,13 @@ void print_conversation(struct conversation * head,char * output)
 				/*if the streams are being mashed alter the rules regarding newlines and delimitors*/
 				if(last && argopts._mash_)
 				{
-					if(last->src_port != head->src_port)
+					if(last->src_port != placeholder->src_port)
 					{
 						if(packet_count%2 == 0)
 						{
 							print_conversation_node(out,packet_count-1,conversation_count,last);
 							double_print(0,1,out,"");
-							print_conversation_node(out,packet_count,conversation_count,head);
+							print_conversation_node(out,packet_count,conversation_count,placeholder);
 						}
 					}
 					else
@@ -270,31 +270,31 @@ void print_conversation(struct conversation * head,char * output)
 					two nodes are read in and printed simultaneously*/
 					if(!argopts._mash_)
 					{
-						print_conversation_node(out,packet_count,conversation_count,head);
+						print_conversation_node(out,packet_count,conversation_count,placeholder);
 					}
 
-					last = head;
+					last = placeholder;
 					++packet_count;
 				}						
 			}	
 	
-			head = head->next;
+			placeholder = placeholder->next;
 		}
 	}
 	else
 	{
 		/*If we're just printing the conversation list start here....*/
-		if(head)
+		if(placeholder)
 		{
 			double_print(1,/*reset first_argument_condition to prevent delimitors*/
 				1,/*set the comparator to true on every run*/
 				out,
-				"%i.] %s %u %s %u \n",
+				"%i.] %s:%u  %s:%u\n",
 				conversation_count,
-				head->src,
-				head->src_port,
-				head->dst,
-				head->dst_port);
+				placeholder->src,
+				placeholder->src_port,
+				placeholder->dst,
+				placeholder->dst_port);
 		}
 	}
 	/*cleanup!*/

@@ -45,6 +45,7 @@ void print_conversation_node(FILE * /*A potential outfile to pass to double_prin
 			conversation * /*packet to print*/
 			);
 
-void print_conversation(conversation *,char * /*filename of outfile*/);
+void print_conversation(conversation *,char * /*filename of outfile*/,
+				int /*conversation count*/);
 
 #endif

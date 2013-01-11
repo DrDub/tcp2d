@@ -53,7 +53,6 @@ int main(int argc,char **argv)
 		}
 
 		print_conversation_list(tcp_conversations);
-
 		return 0;
 	}
 	else

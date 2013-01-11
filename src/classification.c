@@ -150,7 +150,12 @@ void add_classification_tree_node(struct classification_tree_node * newmember,
 _Bool classification_tree_comparator(struct classification_tree_node * node, 
 						struct conversation * current)
 {
-	if(node->seq == current->seq)
+	if((node->seq == current->seq) || (node->seq == 0))
+	{
+		return 1;
+	}
+	else if((node->seq_high > 0) && ((current->seq <= node->seq_high) &&
+					(current->seq >= node->seq)) )
 	{
 		return 1;
 	}
@@ -193,26 +198,21 @@ char * get_classification_label(struct conversation * current,int conversation_n
 			else if(classification_rules->root->seq < current->seq)
 			{
 				placeholder_node = classification_rules->root->left;
-				if(placeholder_node){printf("left %u",placeholder_node->seq);}
-				else{printf("left_is_blank\n");}
 			}
 			else
 			{
 				placeholder_node = classification_rules->root->right;
-				if(placeholder_node){printf("right %u",placeholder_node->seq);}
-				else{printf("right_is_blank\n");}
 
 			}
 			
 			/*Look for matches in the tree*/
 			while(placeholder_node)
 			{
-				printf("h %u l \n",placeholder_node->seq,placeholder_node->seq_high);
 
-				//if(classification_tree_comparator(placeholder_node,current))
-				//{
-				//	return placeholder_node->label;
-				//}
+				if(classification_tree_comparator(placeholder_node,current))
+				{
+					return placeholder_node->label;
+				}
 
 				/*move on to the next node*/
 				if(placeholder_node->seq < current->seq)

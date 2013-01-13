@@ -100,7 +100,7 @@ void print_conversation_list(struct conversation_list * tcp_conversations)
 	if(tcp_conversations)
 	{
 		//So we can change _outfile_ from its original state on each loop
-		char * _out_ = (char *)malloc(sizeof(char)*2048);
+		char * _out_;
 		int count = 1;
 		
 		/*if we aren't splitting this part's easy....*/
@@ -111,6 +111,7 @@ void print_conversation_list(struct conversation_list * tcp_conversations)
 		/*otherwise we have to splice the conversation count with the filename*/
 		if(argopts._split_output_ && argopts._outfile_)
 		{
+			_out_ = (char *)malloc(sizeof(char)*(2048+strlen(argopts._outfile_)));
 			memset(_out_,0,sizeof(char)*strlen(_out_));
 			sprintf(_out_,"%s.%i",_out_,count);
 		}
@@ -133,6 +134,16 @@ void print_conversation_list(struct conversation_list * tcp_conversations)
 			print_conversation(current->head,_out_,count);
 			current = current->next;
 		}
+
+        	//reset the outfile settings
+	        if(argopts._outfile_)
+        	{
+                	argopts._outfile_ = 0;
+	        }
+        	if(argopts._split_output_)
+	        {
+        	        free(_out_);
+	        }
 		
 	}
 }	

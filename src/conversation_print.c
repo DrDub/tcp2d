@@ -67,6 +67,18 @@ void print_conversation_node(FILE * out,int packet_count,int conversation_count,
 	_Bool first_local_run = 1;
 			
 	/*payload*/
+	if(argopts._print_payload_)
+	{
+                if(argopts._text_payload_)
+                {
+                        strip_non_printable(head->payload);
+                }
+                else if(argopts._hex_payload_)
+                {
+                        binary_to_printable(head->payload,head->payload);
+                }
+	}
+
         double_print(first_local_run,argopts._print_payload_,
            	out,"\"%s\"",head->payload);
 	

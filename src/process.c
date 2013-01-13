@@ -34,24 +34,11 @@ void process(u_char *userData, const struct pcap_pkthdr* pkthdr, const u_char* p
 
 	etherHeader= (struct ether_header*)packet;
 	
-	if(argopts._print_payload_)
-	{
-		char * raw = (char *)packet+sizeof(struct ether_header)+sizeof(struct ip)+sizeof(struct tcphdr);
-		char * payload = (char *)malloc(sizeof(char)*(strlen(raw)*2)+1);	
+	char * raw = (char *)packet+sizeof(struct ether_header)+sizeof(struct ip)+sizeof(struct tcphdr);
+	char * payload = (char *)malloc(sizeof(char)*(strlen(raw)*2)+1);	
 	
-		memcpy(payload,raw,strlen(raw));
-
-		if(argopts._text_payload_)
-		{
-			strip_non_printable(payload);
-		}
-		else if(argopts._hex_payload_)
-		{
-			binary_to_printable(raw,payload);
-		}
-
-		current->payload = payload;
-	}
+	memcpy(payload,raw,strlen(raw));
+	current->payload = payload;
 
 	/*See if it's an IP packet.*/	
 	if(ntohs(etherHeader->ether_type) == ETHERTYPE_IP)

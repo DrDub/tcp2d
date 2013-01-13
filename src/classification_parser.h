@@ -30,6 +30,9 @@
 void conversation_rule_error(const char /*error msg*/
 			, char * /*rule being parsed during error*/);
 
+//Cleanup classification rules to get ready for loading another set
+void cleanup_classification_rules();
+
 //Read classification rules from argopts and attach them to classification_rules
 void process_classification_rules(char *);
 

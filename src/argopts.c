@@ -72,6 +72,7 @@ struct argopts argopts =
 	._classification_rules_ = 0,
 	._default_label_ = "-",
 	._binary_dump_ = 0,
+	._wait_for_args_ = 0,
 
 	._filename_ = 0,
 	._outfile_ = 0
@@ -94,6 +95,7 @@ static struct option long_options[] =
 	{"arff",no_argument,0,'A'},
 	{"no-header",no_argument,0,'H'},
 	{"quiet",no_argument,0,'Q'},
+	{"wait-for-args",no_argument,0,'!'},
 	{"help",no_argument,0,'?'},
         {0,0,0,0}
 };
@@ -129,12 +131,13 @@ void print_usage()
 	printf("-D --keep-duplicates (turns off dropping of duplicate packets)\n");
 	printf("-Q --quiet	  (disable stdout)\n");
 	printf("-N --no-wrap	  (print results as a single line)\n");
+	printf("-! --wait-for-args(load pcap into memory and wait for arguments)\n");
 }
 
 int process_opts(int argc, char ** argv)
 {
 	int long_index,c;
-        while ((c = getopt_long(argc, argv,"?TXMLDNAHQf:d:m:BSo:c:", 
+        while ((c = getopt_long(argc, argv,"?!TXMLDNAHQf:d:m:BSo:c:", 
                    long_options, &long_index )) != -1)
         {
                 switch (c)
@@ -189,6 +192,9 @@ int process_opts(int argc, char ** argv)
 				break;
 			case 'Q':
 				argopts._quiet_ = 1;
+				break;
+			case '!':
+				argopts._wait_for_args_ = 1;
 				break;
 			case '?':
 				print_usage();

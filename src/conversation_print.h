@@ -25,6 +25,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#include "payload.h"
 #include "classification.h"
 #include "conversation.h"
 #include "conversation_header.h"

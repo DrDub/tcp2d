@@ -173,25 +173,24 @@ char * get_classification_label(struct conversation * current,int conversation_n
 	/*jump to the correct node, and delete the ones that are already used*/
 	while(classification_rules)
 	{
-		if(classification_rules->conversation_number >= conversation_number)
+		placeholder = classification_rules;
+
+		if(placeholder->conversation_number >= conversation_number)
 		{
 			break;
 		}
 		else
 		{
-			placeholder = classification_rules;
-			classification_rules = classification_rules->next;
-			free(placeholder->root);
-			free(placeholder);
+			placeholder = placeholder->next;
 		}
 	}
 	
-	if(classification_rules)
+	if(placeholder)
 	{
-		if(classification_rules->conversation_number == conversation_number)
+		if(placeholder->conversation_number == conversation_number)
 		{
 			/*Make sure we're not already at the right spot*/
-			placeholder_node = classification_rules->root;
+			placeholder_node = placeholder->root;
 			if(classification_tree_comparator(placeholder_node,current))
 			{
 				return placeholder_node->label;

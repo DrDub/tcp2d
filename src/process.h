@@ -31,7 +31,6 @@
 #include <arpa/inet.h>
 #include <pcap.h>
 
-#include "payload.h"
 #include "conversation.h"
 #include "conversation_list.h"
 #include "argopts.h"

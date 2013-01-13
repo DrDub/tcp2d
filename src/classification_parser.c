@@ -25,8 +25,22 @@ void classification_rule_error(const char * msg, char * rule)
 	exit(0);
 }
 
+void cleanup_classification_rules()
+{
+	struct classification * placeholder;
+	while(classification_rules)
+	{
+		placeholder = classification_rules;
+		classification_rules = classification_rules->next;
+		free(placeholder);
+	}
+	
+	classification_rules;
+}
+
 void process_classification_rules(char * arg)
 {
+
 	/*avoid const chars.  :p*/
 	char rules[strlen(arg)+1];
 	strcpy(rules,arg);

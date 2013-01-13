@@ -33,6 +33,7 @@ struct argopts
 	char * _filename_;
 	char * _outfile_;
 
+	_Bool _wait_for_args_; /*loads pcap into memory and waits for more arguments to be passed*/
 	_Bool _binary_dump_; /*overrides regular output/writes non-formatted payloads for each stream*/
 
         _Bool _split_output_; /*appends output to create multiple files split by conversation*/

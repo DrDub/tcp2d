@@ -205,6 +205,35 @@ int process_opts(int argc, char ** argv)
                 }
         }
 
+void process_from_file(char * filename, void (*process_function)(char *))
+{
+        FILE *file = fopen(filename, "r");
+        if (file != NULL)
+        {
+                char line[256];
+                while(fgets(line,sizeof(line),file) != NULL)
+                {
+                        /* strip trailing newline */
+                        for (int i = 0; i < strlen(line); i++)
+                        {
+                            if (line[i] == '\n' || line[i] == '\r' )
+                            {
+                                line[i] = '\0';
+                            }
+                        }
+
+                        process_function(line);
+                }
+                fclose (file);
+        }
+        else
+        {
+                perror(filename);
+        }
+}
+    
+	process_from_file("class.ini",process_classification_rules);
+
 	process_format_string(argopts._format_);
 	if(argopts._classification_rules_)
 	{

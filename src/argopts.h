@@ -98,4 +98,8 @@ extern struct argopts argopts;
 
 int process_opts(int, char **);
 
+//Read in config files for processing format and classification_rules
+void process_from_file(char * /*filename*/, 
+	void(char *) /*function to send char arrays to*/);
+
 #endif

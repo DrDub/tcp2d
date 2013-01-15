@@ -2,14 +2,16 @@
 
 # Labeling now works.
 
+# Formatting/Labeling from files.
+
+# Change default label.
+
 # Some pretty stupid memory allocation errors in process.c payload.c have been fixed.
 
 # seq/seq_high in classification_tree_node are now unisigned long long.
 
 //CURRENTLY WORKING ON
 
-# Reading formatting/labelling from text files.
-
 # Generating ARFF headers.
 
-#+Progress Made; need to add a format_reset function to switch all the argopts._print_* options back to false+ Loading the pcap into memory once and then allowing it to be printed multiple times with multiple formats and classification labels.
+# Finishing wait-for-args arguments, so that GUI scripts can interface with the program

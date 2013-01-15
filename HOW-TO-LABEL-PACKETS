@@ -1,10 +1,15 @@
 Individual packets can be labeled with classification rules using the '-c' option.
+Classification rules may also be loaded from a text file with the '-r <filename>' option.
+See class.ini for an example file.
 
-For efficiency, at this time, labeling a packet requires previous knowledge of its conversation number (as read by tcp2d) and the sequence number.
+For efficiency, at this time, labeling a packet requires previous knowledge of its conversation number 
+(as read by tcp2d) and the sequence number.
 
 To get a list of conversations simply use the -L option ` tcp2d -f <pcap> -L `
 
 Once you know the conversation number where your packet(s) will fall and their sequence number(s) simply input rules with the following format
+
+You can also change the default label by using the '-l <new_label>' option.
 
 *note* ending each rule with a semi-colon ';' is very important!
 

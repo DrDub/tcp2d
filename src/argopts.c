@@ -69,8 +69,10 @@ struct argopts argopts =
 
 	._delimitor_ = ",",
 	._format_ = "default;",
+	._format_file_ = 0,
 	._classification_rules_ = 0,
-	._default_label_ = "-",
+	._classification_rules_file_ = 0,
+	._default_label_ = "?",
 	._binary_dump_ = 0,
 	._wait_for_args_ = 0,
 
@@ -87,6 +89,10 @@ static struct option long_options[] =
 	{"list-conversations",no_argument,0,'L'},
 	{"delimitor",required_argument,0,'d'},
 	{"format",required_argument,0,'f'},
+	{"format-file",required_argument,0,'h'},
+	{"classification-rules",required_argument,0,'c'},
+	{"rule-file",required_argument,0,'r'},
+	{"default-label",required_argument,0,'l'},
 	{"output",required_argument,0,'o'},
 	{"binary-dump",no_argument,0,'B'},
 	{"split-output",no_argument,0,'S'},
@@ -102,8 +108,7 @@ static struct option long_options[] =
 
 void print_usage()
 {
-	printf("tcp2d :: Author: Morgan Phillips (winter2718@gmail.com) (http://k8pl.us)\n\n");
-	printf("Warning: This program is still early in development and is not well tested.\n\n");
+	printf("tcp2d :: Author: Morgan Phillips (winter2718@gmail.com) (http://k8pl.us)\n");
 	printf("tcp2d is a program for building usable data sets in csv or arff format out of TCP streams.\n");
  	printf("TCP packets are reassembled, and duplicates dropped, by default.\n\n");
 	printf("Options with arguments:\n");
@@ -111,7 +116,10 @@ void print_usage()
 	printf("-o --output 	  	  (name/path to an output file)\n");
 	printf("-d --delimitor	  	  (change the field delimitor, default is ',')\n");
 	printf("-c --classification-rules (allows classification of individual packets)\n");
-	printf("-m --format	  	  (change the fields displayed)\n\n");
+	printf("-r --rule-file		  (load classification rules from a file)\n");
+	printf("-l --default-label	  (set default label for classification rules)\n");
+	printf("-m --format	  	  (change the fields displayed)\n");
+	printf("-h --format-file	  (load format options from a file)\n\n");
 	
 	printf("format example: -m 'srcip;dstip;tcpflags;ip_len;payload;'\n");
 	printf("will output the source ip, destination ip, tcp flags, ip length, and payload.\n");
@@ -121,8 +129,8 @@ void print_usage()
 		
 	printf("Flags:\n");
 	printf("-L --list-conversations (shows all tcp conversations available in a data set)\n");
-	printf("-A --arff-header  /in development/(adds an arff header to the top of any output)\n");
-	printf("-H --no-header	  /in development/(disables column headings)\n");
+	printf("-A --arff-header  (adds an arff header to the top of any output)\n");
+	printf("-H --no-header	  (disables column headings)\n");
 	printf("-T --text-payload (remove all non-printable values from payloads)\n");
 	printf("-X --hex-payload  (show all payloads as hex, most useful for document classification of payloads)\n");
 	printf("-S --split-output (split output streams into individual files)\n");
@@ -137,7 +145,7 @@ void print_usage()
 int process_opts(int argc, char ** argv)
 {
 	int long_index,c;
-        while ((c = getopt_long(argc, argv,"?!TXMLDNAHQf:d:m:BSo:c:", 
+        while ((c = getopt_long(argc, argv,"?!TXMLDNAHQf:d:m:BSo:c:r:h:l:", 
                    long_options, &long_index )) != -1)
         {
                 switch (c)
@@ -168,6 +176,15 @@ int process_opts(int argc, char ** argv)
 				break;
 			case 'c':
 				argopts._classification_rules_ = optarg;
+				break;
+			case 'r':
+				argopts._classification_rules_file_ = optarg;
+				break;
+			case 'l':
+				argopts._default_label_ = optarg;
+				break;
+			case 'h':
+				argopts._format_file_ = optarg;
 				break;
 			case 'B':
 				argopts._binary_dump_ = 1;
@@ -231,13 +248,23 @@ void process_from_file(char * filename, void (*process_function)(char *))
                 perror(filename);
         }
 }
-    
-	process_from_file("class.ini",process_classification_rules);
 
-	process_format_string(argopts._format_);
+	if(argopts._format_file_)
+	{  
+		process_from_file(argopts._format_file_,process_format_string);
+	}
+	else
+	{  
+		process_format_string(argopts._format_);
+	}
+	
 	if(argopts._classification_rules_)
 	{
 		process_classification_rules(argopts._classification_rules_);
+	}
+	else if(argopts._classification_rules_file_)
+	{
+	        process_from_file(argopts._classification_rules_file_,process_classification_rules);
 	}
 	return 1;
 }

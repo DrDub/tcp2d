@@ -170,10 +170,11 @@ char * get_classification_label(struct conversation * current,int conversation_n
 	struct classification * placeholder;
 	struct classification_tree_node  * placeholder_node;	
 
-	/*jump to the correct node, and delete the ones that are already used*/
-	while(classification_rules)
+	placeholder = classification_rules;
+
+	/*jump to the correct node*/
+	while(placeholder)
 	{
-		placeholder = classification_rules;
 
 		if(placeholder->conversation_number >= conversation_number)
 		{

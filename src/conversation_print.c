@@ -158,7 +158,7 @@ void print_conversation_node(FILE * out,int packet_count,int conversation_count,
 		out,"%u",head->extra.ip_sum);	
 
 	/*See about printing a label from classification_rules*/
-	if(argopts._classification_rules_)
+	if(argopts._classification_rules_ || argopts._classification_rules_file_)
 	{
 		double_print(first_local_run,1,
 				out,"%s",get_classification_label(head,conversation_count));

@@ -42,7 +42,9 @@ struct argopts
 
 	char * _delimitor_; /*defaults to ','*/
 	char * _format_; /*data from this string is used to switch on the _print_* options*/
+	char * _format_file_; /*filename of file w/ format options*/
 	char * _classification_rules_; /*a list of conversation numbers mapped to classes*/
+	char * _classification_rules_file_; /*filename with of file w/ class rules*/
 	char * _default_label_; /* if there are no classification_rule matches */
 
 	_Bool _text_payload_; /*strips any non-printable characters from a payload using isprint()*/

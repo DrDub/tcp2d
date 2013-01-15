@@ -12,10 +12,13 @@ I've also added various filters for payload data and a formatting scheme that al
 
 Options with arguments:
 -f --filename     	  (path to a packet capture file to be used)
--o --output 	 	  (name/path to an output file)
+-o --output 	  	  (name/path to an output file)
 -d --delimitor	  	  (change the field delimitor, default is ',')
 -c --classification-rules (allows classification of individual packets)
+-r --rule-file		  (load classification rules from a file)
+-l --default-label	  (set default label for classification rules)
 -m --format	  	  (change the fields displayed)
+-h --format-file	  (load format options from a file)
 
 format example: -m 'srcip;dstip;tcpflags;ip_len;payload;'
 will output the source ip, destination ip, tcp flags, ip length, and payload.
@@ -23,7 +26,7 @@ All data available in the header structs from netinet/ip.h and netinet/tcp.h isa
 
 Flags:
 -L --list-conversations (shows all tcp conversations available in a data set)
--A --arff-header  /in development/(adds an arff header to the top of any output)
+-A --arff-header  (adds an arff header to the top of any output)
 -H --no-header	  (disables column headings)
 -T --text-payload (remove all non-printable values from payloads)
 -X --hex-payload  (show all payloads as hex, most useful for document classification of payloads)
@@ -33,6 +36,7 @@ Flags:
 -D --keep-duplicates (turns off dropping of duplicate packets)
 -Q --quiet	  (disable stdout)
 -N --no-wrap	  (print results as a single line)
+-! --wait-for-args(load pcap into memory and wait for arguments)
 
 //FOR INFO ON FORMATTING AND LABELING SEE:
 	

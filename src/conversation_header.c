@@ -184,7 +184,7 @@ void print_conversation_header(FILE * out,_Bool mashed_header)
 	double_print(first_local_run,argopts._print_ip_sum_,
 		out,"%s",local_header_values.ip_sum);	
 
-	if(argopts._classification_rules_)
+	if(argopts._classification_rules_ || argopts._classification_rules_file_)
 	{
 		double_print(first_local_run,1,
 				out,"%s",local_header_values.label);

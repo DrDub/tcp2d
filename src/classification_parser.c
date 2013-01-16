@@ -35,7 +35,40 @@ void cleanup_classification_rules()
 		free(placeholder);
 	}
 	
-	classification_rules;
+	free(classification_rules);
+	free(argopts._classification_rules_labels_);
+
+	classification_rules = 0;
+	argopts._classification_rules_labels_ = 0;
+}
+
+void append_classification_rules_labels(char * newlabel)
+{
+	if(!argopts._classification_rules_labels_)
+	{
+		argopts._classification_rules_labels_ = (char *)malloc(sizeof(char)*LABEL_LIST_SIZE+1);
+		sprintf(argopts._classification_rules_labels_,"%s",newlabel);
+	}
+	else if((strlen(argopts._classification_rules_labels_)+strlen(newlabel)) >= LABEL_LIST_SIZE)
+	{
+		int multiple_of_label_list_size = 
+			((sizeof(argopts._classification_rules_labels_)/sizeof(char))/LABEL_LIST_SIZE)
+			+(strlen(newlabel)*sizeof(char))+1;
+		char * placeholder = malloc(sizeof(char)*(LABEL_LIST_SIZE*multiple_of_label_list_size)+1);
+		
+		strncpy(placeholder,argopts._classification_rules_labels_,strlen(argopts._classification_rules_labels_));
+		free(argopts._classification_rules_labels_);
+		
+		argopts._classification_rules_labels_ = placeholder;	
+	}
+	else
+	{
+		if(!strstr(argopts._classification_rules_labels_,newlabel))
+		{
+                	sprintf(argopts._classification_rules_labels_+strlen(argopts._classification_rules_labels_),
+												",%s",newlabel);
+		}		
+	}
 }
 
 void process_classification_rules(char * arg)
@@ -102,6 +135,8 @@ void process_classification_rules(char * arg)
 							
 							new_member->conversation_number = conversation_number;
 							new_member->root->label = label;
+							append_classification_rules_labels(label);
+
 							new_member->root->seq = seq;
 							new_member->root->seq_high = seq_high;
 
@@ -130,6 +165,8 @@ void process_classification_rules(char * arg)
 								new_member->conversation_number = 
 											conversation_number;
                                                         	new_member->root->label = label;
+								append_classification_rules_labels(label);
+
                                                       	 	new_member->root->seq = seq;
                                                         	new_member->root->seq_high = seq_high;
 

@@ -129,8 +129,7 @@ void print_conversation_list(struct conversation_list * tcp_conversations)
         	        {
 				memset(_out_,0,strlen(_out_)*sizeof(char));
 				sprintf(_out_,"%s.%i",argopts._outfile_,count);
-                	}
-	
+                	} 
 			print_conversation(current->head,_out_,count);
 			current = current->next;
 		}

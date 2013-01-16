@@ -47,6 +47,8 @@ struct argopts
 	char * _classification_rules_file_; /*filename with of file w/ class rules*/
 	char * _default_label_; /* if there are no classification_rule matches */
 
+	char * _classification_rules_labels_; /* a running list of class labels to make arff headers easier */
+
 	_Bool _text_payload_; /*strips any non-printable characters from a payload using isprint()*/
 	_Bool _hex_payload_; /*converts each byte of a payload to a hex representation*/
 

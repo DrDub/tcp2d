@@ -73,6 +73,7 @@ struct argopts argopts =
 	._classification_rules_ = 0,
 	._classification_rules_file_ = 0,
 	._default_label_ = "?",
+	._classification_rules_labels_ = 0,
 	._binary_dump_ = 0,
 	._wait_for_args_ = 0,
 
@@ -182,6 +183,7 @@ int process_opts(int argc, char ** argv)
 				break;
 			case 'l':
 				argopts._default_label_ = optarg;
+				append_classification_rules_labels(optarg);
 				break;
 			case 'h':
 				argopts._format_file_ = optarg;

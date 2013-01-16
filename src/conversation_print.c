@@ -210,6 +210,7 @@ void print_conversation(struct conversation * head,char * output,int conversatio
 		{
 			if(argopts._split_output_)
 			{
+				printf("\n// conversation %u //\n",conversation_count);
 				print_conversation_header(out,0);
 				if(argopts._mash_)
 				{

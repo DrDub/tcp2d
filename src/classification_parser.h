@@ -33,6 +33,11 @@ void conversation_rule_error(const char /*error msg*/
 //Cleanup classification rules to get ready for loading another set
 void cleanup_classification_rules();
 
+#define LABEL_LIST_SIZE 2048
+
+//Add to a running global list of classification labels (see argopts.h)
+void append_classification_rules_labels(char *);
+
 //Read classification rules from argopts and attach them to classification_rules
 void process_classification_rules(char *);
 

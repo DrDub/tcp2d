@@ -55,7 +55,6 @@ int main(int argc,char **argv)
 		//pcap loaded into memory and organized.  Now what?
 
 		print_conversation_list(tcp_conversations);
-		
 		return 0;
 	}
 	else
